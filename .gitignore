@@ -1,0 +1,46 @@
+# Entorno virtual
+venv/
+ENV/
+env/
+.venv/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Configuración de VSCode y otros IDEs
+.vscode/
+.idea/
+
+# Archivos de bases de datos temporales
+*.sqlite3
+*.db
+*.sql.bak
+
+# Datos cargados
+data/*.csv
+
+# Resultados de pytest
+.cache/
+.pytest_cache/
+htmlcov/
+coverage.xml
+
+# Archivos ocultos de Jupyter o testing
+.ipynb_checkpoints/
+
+# Archivos de configuración locales
+.env
+*.env
+
+# Archivos de sistema de Windows
+*.swp
+*.bak
+~$*
