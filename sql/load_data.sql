@@ -87,6 +87,8 @@ SHOW GLOBAL VARIABLES LIKE 'local_infile';
 
 
 -- Cargar datos desde los archivo CSV
+    -- Asegurarse de que el archivo CSV existe en la ruta especificada
+    -- Modificar las rutas de los archivos CSV según sea necesario
 -- Cargar datos de categories
 LOAD DATA LOCAL INFILE 'C:/Users/bcami/OneDrive/Escritorio/ACCENTURE/sales_company/data/categories.csv'
 INTO TABLE categories
