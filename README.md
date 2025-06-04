@@ -9,10 +9,15 @@ El sistema está diseñado para trabajar con una base de datos relacional (MySQL
 
 ```
 sales_company/
+├── notebooks/          # Jupyter notebook para análisis
+│   └── sales_analysis_demo.ipynb
 ├── data/               # Archivos CSV originales
 ├── sql/                # Scripts para crear tablas y cargar datos
 ├── src/
+│   └── core/           # Configuracion de las variables de entorno y validaciones
+│   └── database/       # Configuracion de la conexion a la base de datos
 │   └── models/         # Clases que representan las entidades del negocio
+│   └── utils/          # Funciones de utilidad, logger
 ├── test/               # Pruebas unitarias con pytest
 ├── .env                # Configuración de conexión a base de datos
 ├── .gitignore          # Exclusiones de control de versiones
@@ -39,7 +44,7 @@ sales_company/
 
 ```bash
 # Crear entorno virtual
-python -m venv venv
+python -m venv venv_sales_company
 
 # Activar entorno virtual
 # En Windows:
@@ -71,9 +76,13 @@ DB_PORT=3306
 
 1. Abrir MySQL Workbench e iniciar sesión.
 2. Ejecutar el script SQL `sql/load_data.sql` que:
+
    - Crea la base de datos `sales_company`.
    - Crea todas las tablas necesarias.
-   - Carga los archivos `.csv` desde la carpeta `/data/` usando `LOAD DATA LOCAL INFILE`.
+   - Carga los archivos `.csv` desde la carpeta `/data/` usando `LOAD DATA LOCAL INFILE` ( ver script `sql/load_data.sql`).
+
+     💡 Asegúrate de que la ruta a los archivos `.csv` sea absoluta y compatible con `LOAD DATA LOCAL INFILE` (por ejemplo, `C:/ruta/proyecto/data/archivo.csv`).
+
 3. Asegurarse de tener habilitada la opción `local_infile` tanto en el servidor como en el cliente (ver errores `Error Code: 3948` o `2068` si no está habilitado).
 
 ---
@@ -91,15 +100,13 @@ Cada clase:
 - Incluye **métodos útiles** para el negocio (como `get_full_name`, `get_tenure`, `apply_discount`, etc.)
 - Implementa `__repr__` para facilitar debugging
 
----
+patrón Singleton aplicado a la conexión con la base de datos.
 
 ## 🧪 Cómo ejecutar los tests
 
 Los tests están ubicados en la carpeta `test/`.
 
-Para correrlos usar el comando:
-
-Desde la raiz del proyecto
+Para correrlos usar el siguiente comando desde la raiz del proyecto:
 
 ```bash
 pytest
@@ -110,14 +117,27 @@ Los tests unitarios validan:
 - Que los métodos como `get_full_name` y `get_price` funcionen correctamente
 - Que los setters actualicen atributos privados
 - Que las representaciones (`__repr__`) devuelvan los valores esperados
+- Que el patron singleton aplicado a la conexion con las base de datos funcione correctamente.
 
 ---
+
+## 📊 Notebook interactivo
+
+En la carpeta `notebooks/` se incluye el archivo `sales_analysis_demo.ipynb`, que muestra:
+
+- Conexión y consulta a la base de datos
+- Ejemplo del patrón Singleton en acción
+- Conversión de resultados a DataFrame con `pandas`
+- Ejecución de pruebas con `pytest` desde el entorno de Jupyter
 
 ## 💡 Justificación técnica
 
 - Se utilizó **MySQL** como base de datos relacional, la cual brinda soporte de carga masiva de datos, y compatibilidad con herramientas del ecosistema.
 - La carga de datos se realizó mediante `LOAD DATA LOCAL INFILE`, priorizando eficiencia en comparación con inserciones fila por fila.
 - Las clases en Python están diseñadas bajo **principios de POO** para permitir la reutilización, validación de datos, y crecimiento futuro del sistema.
+- El patrón Singleton aplicado a la conexión permite mantener una única instancia activa de conexión a la base de datos durante la ejecución del sistema.
 - `pytest` fue elegido como framework de testing por su simplicidad, velocidad y facilidad de integración con proyectos en Python moderno.
+
+---
 
 ---
