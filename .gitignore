@@ -25,9 +25,6 @@ __pycache__/
 *.db
 *.sql.bak
 
-# Datos cargados
-data/*.csv
-
 # Resultados de pytest
 .cache/
 .pytest_cache/
