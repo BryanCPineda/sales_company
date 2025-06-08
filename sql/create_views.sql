@@ -40,6 +40,23 @@ FROM (
 WHERE rn = 1
 ORDER BY sucursal, hora, minuto;
 
+-- ===============================================================
+-- Vista: vw_customer_behavior
+-- Descripción:
+--     Resumen ejecutivo del comportamiento de los clientes.
+--     Para los 20 clientes con mayor gasto total, muestra:
+--         - Nombre y monto total gastado
+--         - Número de transacciones realizadas
+--         - Total gastado con y sin promoción
+--         - Sucursal donde más gastó (por monto)
+--         - Producto más comprado (por cantidad)
+--
+--     Utiliza CTEs y funciones ventana (ROW_NUMBER) para calcular
+--     sucursal y producto más relevantes por cliente.
+--
+-- Uso:
+--     SELECT * FROM vw_customer_behavior;
+-- ============================================
 
 CREATE OR REPLACE VIEW vw_customer_behavior AS
 WITH
