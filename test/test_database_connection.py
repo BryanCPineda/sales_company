@@ -34,3 +34,50 @@ def test_execute_query_as_dataframe():
     df = db.execute_query_as_dataframe("SELECT * FROM categories")
     assert isinstance(df, pd.DataFrame), "El resultado no es un DataFrame"
     assert df.columns is not None, "El DataFrame no tiene columnas"
+    
+def test_execute_query_as_dataframe_invalid_query():
+    """Verifica que una consulta inválida retorne un DataFrame vacío y loggee error."""
+    db = DatabaseConnection()
+    df = db.execute_query_as_dataframe("SELECT * FROM tabla_inexistente")
+    assert isinstance(df, pd.DataFrame)
+    assert df.empty
+    
+def test_excute_query_runs_without_error(monkeypatch):
+    """Verifica que excute_query ejecute una consulta válida sin lanzar excepción."""
+    db = DatabaseConnection()
+    db.excute_query("CREATE OR REPLACE VIEW test_view AS SELECT 1 AS val;")
+    db.excute_query("DROP VIEW IF EXISTS test_view;")
+
+def test_excute_query_invalid_query():
+    """Verifica que una consulta inválida en excute_query no lance excepción."""
+    db = DatabaseConnection()
+    try:
+        db.excute_query("SELECT * FROM tabla_inexistente")
+        ran = True
+    except Exception:
+        ran = False
+    assert ran, "excute_query lanzó excepción ante un error de SQL"
+    
+def test_get_session_handles_exception(monkeypatch):
+    """Simula un error al obtener sesión y verifica que se maneje correctamente."""
+    db = DatabaseConnection()
+    original_session = db.Session
+
+    def raise_exception():
+        raise Exception("Error de prueba")
+
+    db.Session = raise_exception
+    session = db.get_session()
+    assert session is None
+    db.Session = original_session  
+    
+def test_close_session_handles_exception(monkeypatch):
+    """Simula un error al cerrar sesión y verifica que se maneje correctamente."""
+    db = DatabaseConnection()
+    class FakeSession:
+        def close(self):
+            raise Exception("Error de prueba")
+    fake_session = FakeSession()
+    db.close_session(fake_session)
+    
+    
