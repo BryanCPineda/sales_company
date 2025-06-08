@@ -81,6 +81,17 @@ class DatabaseConnection:
         except Exception as e:
             logger.error(f"Error al ejecutar la consulta: {str(e)}")
             return pd.DataFrame()
+    
+    def excute_query(self, query: str, params: dict = None):
+        """
+        Ejecuta una consulta SQL, ayuda a cargar nuevas vistas o procedimientos almacenados
+        """
+        try:
+            logger.info(f"Ejecutando consulta: {query}")
+            with self.engine.connect() as connection:
+                connection.execute(text(query), params or {})
+        except Exception as e:
+            logger.error(f"Error al ejecutar la consulta: {str(e)}")
 
 
 
